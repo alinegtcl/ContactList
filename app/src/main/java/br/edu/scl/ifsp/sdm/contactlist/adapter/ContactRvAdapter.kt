@@ -6,8 +6,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.scl.ifsp.sdm.contactlist.databinding.TileContactBinding
 import br.edu.scl.ifsp.sdm.contactlist.model.Contact
+import br.edu.scl.ifsp.sdm.contactlist.view.OnContactClickListener
 
-class ContactRvAdapter(private val contactList: MutableList<Contact>) :
+class ContactRvAdapter(
+    private val contactList: MutableList<Contact>,
+    private val onContactClickListener: OnContactClickListener
+) :
     RecyclerView.Adapter<ContactRvAdapter.ContactViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -18,10 +22,13 @@ class ContactRvAdapter(private val contactList: MutableList<Contact>) :
     override fun getItemCount() = contactList.size
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
-        contactList[position].also {  contact ->
+        contactList[position].also { contact ->
             with(holder) {
                 nameTv.text = contact.name
                 emailTv.text = contact.email
+                itemView.setOnClickListener {
+                    onContactClickListener.onContactClick(position)
+                }
             }
         }
     }
